@@ -1,0 +1,20 @@
+let tablePulled = await input.tableAsync("Select a table");
+let recordsPulled = await tablePulled.selectRecordsAsync();
+let fieldFilter = await input.fieldAsync("Select field to filter",tablePulled) // field to filer by
+let filterString = await input.textAsync("Enter filter option"); // what values to filter with
+let fieldSum = await input.fieldAsync("Select field to sum", tablePulled) // which field to run arithmetics on
+
+
+let sumNumbers = 0; // for sum
+let countNumbers = 0 // for count
+for (let records of recordsPulled.records) { // iterate on the objects inside the object
+    let filterValue = records.getCellValueAsString(fieldFilter);
+    if (filterValue === filterString){ // if filter condition matches the actual values
+        sumNumbers += records.getCellValue(fieldSum); // then do sum in loop
+        countNumbers ++ // count in loop
+    };
+}
+
+
+let averageNumbers = Math.ceil(sumNumbers/countNumbers);
+output.markdown(`OK, the sum of values in ${fieldSum.name} is **${sumNumbers}** when filtered by (${fieldFilter.name} = ${filterString}). This is from ${countNumbers} records. So the average would be ${averageNumbers}.`)
